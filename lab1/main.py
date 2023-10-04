@@ -41,5 +41,7 @@ t3 = np.loadtxt("inicjaly.txt", dtype=np.uint8)
 print("\ntyp danych tablicy t3:", t3.dtype)
 print("rozmiar tablicy t3 :", t3.shape)
 print("wymiar tablicy t3 :", t3.ndim)
+
+# Obraz wyjściowy jest cały czarny dlatego że wartość kodu koloru zmieniła się na zakres od 0 do 255 przy czym 255 to biały a 0 to czarny
 obraz = Image.fromarray(t3)
 obraz.show()
