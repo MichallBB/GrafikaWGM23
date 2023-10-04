@@ -42,6 +42,7 @@ print("\ntyp danych tablicy t3:", t3.dtype)
 print("rozmiar tablicy t3 :", t3.shape)
 print("wymiar tablicy t3 :", t3.ndim)
 
-# Obraz wyjściowy jest cały czarny dlatego że wartość kodu koloru zmieniła się na zakres od 0 do 255 przy czym 255 to biały a 0 to czarny
+# Obraz wyjściowy jest cały czarny dlatego że elementy mają wartość 0 lub 1,
+# a wartość kodu koloru zmieniła się na zakres od 0 do 255 przy czym 255 to biały a 0 to czarny
 obraz = Image.fromarray(t3)
 obraz.show()
