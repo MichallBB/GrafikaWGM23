@@ -43,9 +43,10 @@ def rysuj_ramke(w, h, grub): # grub grubość ramki w pikselach
     tab1 = tab.astype(np.bool_)
     return tab1
 
-tab = rysuj_ramke(60, 120, 6)
+tab = rysuj_ramke(480, 320, 10)
 tab22 = Image.fromarray(tab)
-tab22.show()
+#tab22.show()
+tab22.save("zad3.1.1.bmp")
 
 # 3.1.2
 
@@ -60,10 +61,11 @@ def pionowe_paski(w, h, grub):
     tab = tab * 255
     return Image.fromarray(tab)
 
-tab = pionowe_paski(131, 60, 10)
+tab77 = pionowe_paski(480, 320, 10)
 print("typ danych tablicy", tab.size)
-print("rozmiar wyrazu tablicy:",   tab.format)
-tab.show()
+#print("rozmiar wyrazu tablicy:",   tab.format)
+#tab77.show()
+tab77.save("zad3.1.2.bmp")
 
 # zad 1.3 1.4
 def rysuj_obraz3(w, h, m, n):
@@ -76,7 +78,7 @@ def rysuj_obraz3(w, h, m, n):
 
 tab5 = rysuj_obraz3(480, 320, 100,50)
 tab5.show()
-
+tab5.save("zad3.1.3.bmp")
 
 # funkcja rysuje linie tak dluga jak podana jest wartosc argumentu len (w pikselach), linia jest tworzona od lewej do prawej
 # w = szerokosc obrazu, h = wysokosc obrazu, grub = grubosc lini, len = dlugosc lini jaka ma byc
@@ -105,20 +107,21 @@ def rysuj_obraz4(w, h, grub, len):
     tab1 = tab.astype(np.bool_)
     return Image.fromarray(tab1)
 
-tab6 = rysuj_obraz4(500, 500, 11,5000)
-tab6.show()
+tab6 = rysuj_obraz4(480, 320, 10,5000)
+#tab6.show()
+tab6.save("zad3.1.4.bmp")
 
-def wstaw_obraz_w_obraz(obraz_bazowy,obraz_wstawiany, m, n): # w,h rozmiary nowego obrazu, m<=w,  n<=h (m,n miejsce wstawienia obrazu )
+def wstaw_obraz_w_obraz(obraz_bazowy,obraz_wstawiany, m, n):
+    # w,h rozmiary nowego obrazu, m<=w,  n<=h (m,n miejsce wstawienia obrazu )
     tab_obraz = np.asarray(obraz_wstawiany)*1
     h0, w0 = tab_obraz.shape
     h = obraz_bazowy.height
     w = obraz_bazowy.width
-    #t = (h, w)  # rozmiar tablicy nowego obrazu
-    tab = np.asarray(obraz_bazowy)*1  # deklaracja tablicy wypełnionej jedynkami - biała
-    n_k = min(h, n + h0) # jesli wstawiany obraz wychodzi poza ramy nowego obrazu, to przycinamy
-    m_k = min(w, m + w0) # jesli wstawiany obraz wychodzi poza ramy nowego obrazu, to przycinamy
-    n_p = max(0, n) # jesli miejsce wstawienia jest ujemne(wychodzi poza nowy obraz w górę), to przycinamy
-    m_p = max(0, m) # jesli miejsce wstawienia jest ujemne(wychodzi poza nowy obraz w lewo), to przycinamy
+    tab = np.asarray(obraz_bazowy)*1
+    n_k = min(h, n + h0)
+    m_k = min(w, m + w0)
+    n_p = max(0, n)
+    m_p = max(0, m)
     print(n_k, m_k)
     print(n_p, m_p)
     for i in range(n_p, n_k):
@@ -127,5 +130,8 @@ def wstaw_obraz_w_obraz(obraz_bazowy,obraz_wstawiany, m, n): # w,h rozmiary nowe
     tab = tab.astype(bool) # zapisanie tablicy w typie bool (obrazy czarnobiałe)
     return Image.fromarray(tab)
 
-obraz = wstaw_obraz_w_obraz(tab6,tab22 ,15,15)
+obraz = wstaw_obraz_w_obraz(tab6,inicjaly ,300,90)
 obraz.show()
+obraz.save("wstaw1.bmp")
+obraz2 = wstaw_obraz_w_obraz(tab6,inicjaly ,10,290)
+obraz2.save("wstaw2.bmp")
