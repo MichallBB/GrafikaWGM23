@@ -5,6 +5,10 @@ import matplotlib.pyplot as plt
 obraz = Image.open('obraz.jpg')
 inicjaly = Image.open('inicjaly.bmp')
 
+def zakres(w, h):  # funkcja, która uprości podwójna petle for
+    return [(i, j) for i in range(w) for j in range(h)]
+
+
 def wstaw_inicjaly(obraz, inicjaly, kolor):
     obraz1 = obraz.copy()
     m = obraz.width - inicjaly.width
@@ -65,8 +69,8 @@ def wstaw_inicjaly_maska_load(obraz, inicjaly, m, n, x, y, z):
 
     return obraz2
 
-obraz_z_inicjalami = wstaw_inicjaly_load(obraz, inicjaly, obraz.width - inicjaly.width, obraz.height - inicjaly.height, (255, 0, 0)).show()
-obraz_z_maska = wstaw_inicjaly_maska_load(obraz, inicjaly, (obraz.width - inicjaly.width) // 2, (obraz.height - inicjaly.height) // 2, 50, 50, 50).show()
+obraz_z_inicjalami = wstaw_inicjaly_load(obraz, inicjaly, obraz.width - inicjaly.width, obraz.height - inicjaly.height, (255, 0, 0))
+obraz_z_maska = wstaw_inicjaly_maska_load(obraz, inicjaly, (obraz.width - inicjaly.width) // 2, (obraz.height - inicjaly.height) // 2, 50, 50, 50)
 
 
 
@@ -90,16 +94,17 @@ axes[1, 1].imshow(kontrast3)
 axes[1, 1].set_title('Kontrast 150')
 plt.savefig("fig1.png")
 
-
 def transformacja_logarytmiczna(obraz):
     obraz2 = obraz.copy()
     return obraz2.point(lambda i: int(255 * np.log(1 + i / 255)))
 
-
-def filtr_liniowy(obraz, a, b):
-    obraz2 = obraz.copy()
-    return obraz2.point(lambda i: int(max(0, min(255, a * i + b))))
-
+def filtr_liniowy(image, a, b): # a, b liczby całkowite
+    image2 = image.copy()
+    w, h = image2.size
+    pixele = image2.load()
+    for i, j in zakres(w, h):
+        pixele[i, j] = (pixele[i, j][0]* a + b, pixele[i, j][1]* a + b, pixele[i, j][2]* a + b)
+    return image2
 
 obraz_log = transformacja_logarytmiczna(obraz)
 obraz_filtr = filtr_liniowy(obraz, 2, 100)
@@ -112,7 +117,7 @@ axes[1].imshow(obraz_log)
 axes[1].set_title('Transformacja logarytmiczna')
 
 axes[2].imshow(obraz_filtr)
-axes[2].set_title('Filtr liniowy (a=2, b=100)')
+axes[2].set_title('Filtr liniowy')
 plt.savefig("fig2.png")
 
 
@@ -137,4 +142,16 @@ axes[3].imshow(np.array(gamma3))
 axes[3].set_title('gamma 1.5')
 
 plt.savefig("fig3.png")
-plt.show()
+
+im8 = obraz.copy()
+im8 = im8.point(lambda i: i + 100) # funkcja rozjasnia kazdy piksel o 100
+im8.show()
+
+def dodaj_100_do_tablicy_obrazu(obraz):
+    tablica = np.array(obraz)
+    nowa_tablica = tablica + 100
+    nowy_obraz = Image.fromarray(nowa_tablica.astype('uint8'))
+    return nowy_obraz
+
+nowy_obraz = dodaj_100_do_tablicy_obrazu(obraz).show()
+
