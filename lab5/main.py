@@ -34,7 +34,7 @@ def rysuj_histogram_RGB(obraz):
 rysuj_histogram_RGB(diff1)
 
 
-def zlicz_roznice_srednia_RGB(obraz, wsp): # wsp - współczynnik określający dokładność oceny
+def zlicz_roznice_srednia_RGB(obraz, wsp):
     t_obraz = np.asarray(obraz)
     h, w, d = t_obraz.shape
     zlicz = 0
@@ -78,3 +78,38 @@ obraz4 = Image.open("obraz3.jpg")
 obraz4.save("obraz4.jpg")
 obraz5 = Image.open("obraz4.jpg")
 obraz5.save("obraz5.jpg")
+
+
+def ukryj_kod(obraz, im_kod):
+    t_obraz = np.asarray(obraz)
+    t_kodowany = t_obraz.copy()
+    h, w, d = t_obraz.shape
+    t_kod = np.asarray(im_kod)
+    for i in range(h):
+        for j in range(w):
+            if t_kod[i, j] > 0:
+                k = randint(0,2)
+                t_kodowany[i, j, k] = t_obraz[i, j, k] + 1
+    return Image.fromarray(t_kodowany)
+
+
+def odkoduj(obraz1, obraz2):
+    t_obraz1 = np.asarray(obraz1)
+    t_obraz2 = np.asarray(obraz2)
+    h, w, d = t_obraz1.shape
+    result = np.zeros((h, w, d), dtype=np.uint8)
+
+    for i in range(h):
+        for j in range(w):
+            if np.array_equal(t_obraz1[i, j, :], t_obraz2[i, j, :]):
+                result[i, j, :] = 255  # biały piksel dla identycznych wartości
+            else:
+                result[i, j, :] = 0  # czarny piksel dla różnych wartości
+    return Image.fromarray(result)
+
+
+# Przykład użycia
+obraz1 = Image.open("jesien.jpg")
+obraz2 = Image.open("zakodowany2.bmp")
+kod1 = odkoduj(obraz1, obraz2)
+kod1.save("kod2.bmp")

@@ -19,7 +19,6 @@ def wstaw_inicjaly(obraz, inicjaly, kolor):
             pixel = inicjaly.getpixel((x, y))
             if pixel != 255:
                 obraz1.putpixel((m + x, n + y), kolor)
-
     return obraz1
 
 def wstaw_inicjaly_maska(obraz, inicjaly, m, n,x,y, z):
@@ -28,9 +27,9 @@ def wstaw_inicjaly_maska(obraz, inicjaly, m, n,x,y, z):
         for x in range(inicjaly.width):
             pixel = inicjaly.getpixel((x, y))
             if pixel != 255:
-                current_pixel = obraz2.getpixel((m + x, n + y))
-                new_pixel = tuple(c + value for c, value in zip(current_pixel, (x, y, z)))
-                obraz2.putpixel((m + x, n + y), new_pixel)
+                piksel = obraz2.getpixel((m + x, n + y))
+                nowy_piksel = tuple(c + value for c, value in zip(piksel, (x, y, z)))
+                obraz2.putpixel((m + x, n + y), nowy_piksel)
     return obraz2
 
 
@@ -74,9 +73,9 @@ obraz_z_maska = wstaw_inicjaly_maska_load(obraz, inicjaly, (obraz.width - inicja
 
 
 
-def kontrast(obraz, kontrast):
+def kontrast(obraz, wsp_kontrast):
     obraz2 = obraz.copy()
-    mn = ((255 + kontrast) / 255) ** 2
+    mn = ((255 + wsp_kontrast) / 255) ** 2
     return obraz2.point(lambda i: 128 + (i - 128) * mn)
 
 kontrast1 = kontrast(obraz, 50)
@@ -125,33 +124,23 @@ def transformacja_gamma(obraz, gamma):
     obraz2 = obraz.copy()
     return obraz2.point(lambda i: int((i / 255) ** (1 / gamma) * 255))
 
-
 gamma1 = transformacja_gamma(obraz, 0.5)
 gamma2 = transformacja_gamma(obraz, 1.0)
 gamma3 = transformacja_gamma(obraz, 1.5)
 
 
-fig, axes = plt.subplots(1, 4, figsize=(15, 5))
-axes[0].imshow(np.array(obraz))
-axes[0].set_title('Orginalny obraz')
-axes[1].imshow(np.array(gamma1))
-axes[1].set_title('Gamma 0.5')
-axes[2].imshow(np.array(gamma2))
-axes[2].set_title('gamma 1.0')
-axes[3].imshow(np.array(gamma3))
-axes[3].set_title('gamma 1.5')
+fig, axes = plt.subplots(2, 2, figsize=(10,10))
+axes[0,0].imshow(np.array(obraz))
+axes[0,0].set_title('Orginalny obraz')
+axes[0,1].imshow(np.array(gamma1))
+axes[0,1].set_title('Gamma 0.5')
+axes[1,0].imshow(np.array(gamma2))
+axes[1,0].set_title('gamma 1.0')
+axes[1,1].imshow(np.array(gamma3))
+axes[1,1].set_title('gamma 1.5')
 
 plt.savefig("fig3.png")
 
 im8 = obraz.copy()
 im8 = im8.point(lambda i: i + 100) # funkcja rozjasnia kazdy piksel o 100
 im8.show()
-
-def dodaj_100_do_tablicy_obrazu(obraz):
-    tablica = np.array(obraz)
-    nowa_tablica = tablica + 100
-    nowy_obraz = Image.fromarray(nowa_tablica.astype('uint8'))
-    return nowy_obraz
-
-nowy_obraz = dodaj_100_do_tablicy_obrazu(obraz).show()
-
