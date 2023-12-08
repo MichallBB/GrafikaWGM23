@@ -20,14 +20,12 @@ def histogram_norm(obraz):
     norm_hist = hist / float(img_array.size)
     return norm_hist
 
-
 # 2.2
 def histogram_cumul(obraz):
     img_array = np.array(obraz)
     hist, bins = np.histogram(img_array.flatten(), bins=256, range=[0, 256])
     cumul_hist = np.cumsum(hist)
     return cumul_hist
-
 
 # 2.3
 def histogram_equalization(obraz):
